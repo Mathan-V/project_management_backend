@@ -1,5 +1,6 @@
 [build]
-commands = [
-  "pip install -r requirements.txt",
-  "prisma generate"
-]
+builder = "NIXPACKS"
+
+[deploy]
+startCommand = "python main.py"
+nixpacksCommand = "pip install -r requirements.txt && prisma generate"
