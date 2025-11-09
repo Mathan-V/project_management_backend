@@ -3,7 +3,7 @@ from app.database import db
 from app.models.project_model import ProjectCreate, ProjectUpdate
 from datetime import datetime, date
 from prisma import Json
-from app.services.utils.permissions import require_permission
+#from app.services.utils.permissions import require_permission
 
 router = APIRouter()
 
