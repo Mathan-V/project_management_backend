@@ -8,6 +8,7 @@ app = FastAPI(title="Time Tracker API")
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "https://project-management-w3xk.vercel.app"
 ]
 
 app.add_middleware(
