@@ -10,7 +10,7 @@ origins = [
     "http://127.0.0.1:5173",
     "https://project-management-w3xk-8bg1imqgb-madhansscons-3240s-projects.vercel.app",
     "https://project-management-w3xk-ju6vd5wvn-madhansscons-3240s-projects.vercel.app",
-    "https://project-managements.up.railway.app"
+    "https://project-management-w3xk.vercel.app"
 ]
 
 app.add_middleware(
