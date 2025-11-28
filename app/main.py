@@ -15,11 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI(title="Time Tracker API")
 
 # Allowed origins
-origins = [
-    "http://localhost:5173",                 # local dev
-    "http://127.0.0.1:5173",                 # local dev
-    "https://project-management-w3xk.vercel.app",  # main production domain
-]
+origins = ["*"]
 
 # Add CORS Middleware
 app.add_middleware(
