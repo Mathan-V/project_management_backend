@@ -1,27 +1,37 @@
 from fastapi import FastAPI
-from app.routers import project_router, timesheet_router,user_router,auth,role_router, client_router, seed_routes, permissionRoutes
+from app.routers import (
+    project_router, 
+    timesheet_router,
+    user_router,
+    auth,
+    role_router,
+    client_router,
+    seed_routes,
+    permissionRoutes
+)
 from app.database import db
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Time Tracker API")
 
+# Allowed origins
 origins = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "https://project-management-w3xk-8bg1imqgb-madhansscons-3240s-projects.vercel.app",
-    "https://project-management-w3xk-ju6vd5wvn-madhansscons-3240s-projects.vercel.app",
-    "https://project-management-w3xk.vercel.app"
+    "http://localhost:5173",                 # local dev
+    "http://127.0.0.1:5173",                 # local dev
+    "https://project-management-w3xk.vercel.app",  # main production domain
 ]
 
+# Add CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  
-    allow_credentials=True, 
-    allow_methods=["*"],    
+    allow_origins=origins, 
+    allow_origin_regex=r"https://project-management-w3xk-.*\.vercel\.app$",  
+    allow_credentials=True,
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
+# DB connection events
 @app.on_event("startup")
 async def startup():
     await db.connect()
@@ -33,7 +43,7 @@ async def shutdown():
 # Routers
 app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
 app.include_router(role_router.router, prefix="/role", tags=["Role"])
-app.include_router(user_router.app,prefix="/user", tags= ["User"])
+app.include_router(user_router.app, prefix="/user", tags=["User"])
 app.include_router(client_router.router, prefix="/clients", tags=["Client"])
 app.include_router(project_router.router, prefix="/projects", tags=["Projects"])
 app.include_router(timesheet_router.router, prefix="/timesheet", tags=["Timesheet"])
