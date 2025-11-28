@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.routers import (
-    project_router, 
+    project_router,
     timesheet_router,
     user_router,
     auth,
@@ -14,20 +14,34 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Time Tracker API")
 
-# Allowed origins
-origins = ["*"]
+# ---------------------------------------------------
+# VERCEL + LOCALHOST ALLOWED ORIGINS
+# ---------------------------------------------------
+allowed_origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://project-management-w3xk.vercel.app",
+]
 
-# Add CORS Middleware
+# Allow all Vercel preview deployments automatically:
+# https://project-management-w3xk-xxxxx.vercel.app
+allowed_origin_regex = r"https://project-management-w3xk-.*\.vercel\.app$"
+
+# ---------------------------------------------------
+# CORS MIDDLEWARE (CORRECT CONFIG)
+# ---------------------------------------------------
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins, 
-    allow_origin_regex=r"https://project-management-w3xk-.*\.vercel\.app$",  
+    allow_origins=allowed_origins,
+    allow_origin_regex=allowed_origin_regex,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# DB connection events
+# ---------------------------------------------------
+# DATABASE CONNECTION EVENTS
+# ---------------------------------------------------
 @app.on_event("startup")
 async def startup():
     await db.connect()
@@ -36,12 +50,15 @@ async def startup():
 async def shutdown():
     await db.disconnect()
 
-# Routers
+# ---------------------------------------------------
+# ROUTERS
+# ---------------------------------------------------
 app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
 app.include_router(role_router.router, prefix="/role", tags=["Role"])
 app.include_router(user_router.app, prefix="/user", tags=["User"])
 app.include_router(client_router.router, prefix="/clients", tags=["Client"])
 app.include_router(project_router.router, prefix="/projects", tags=["Projects"])
 app.include_router(timesheet_router.router, prefix="/timesheet", tags=["Timesheet"])
-app.include_router(seed_routes.router, prefix='/seed', tags=["seed"])
+app.include_router(seed_routes.router, prefix="/seed", tags=["Seed"])
 app.include_router(permissionRoutes.router)
+
